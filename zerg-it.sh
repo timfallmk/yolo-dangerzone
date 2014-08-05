@@ -1,7 +1,7 @@
 #!/bin/bash
 set -x
 
-TENANT_ID=
+TENANT_ID=c70abe88ef094f999adb4d3eb4d01725
 ROUTER_ID=
 IMAGE_ID=
 
@@ -16,3 +16,4 @@ neutron net-create --tenant-id $TENANT_ID "relay network ${n}"
 neutron subnet-create --tenant-id $TENANT_ID --name "relay network ${n} subnet" --dns-nameserver 8.8.8.8 --enable-dhcp "relay network ${n}" 10.0.0.0/24
 neutron router-interface-add ${ROUTER_ID} "relay network ${n} subnet"
 
+nova boot --flavor 10 --image ${IMAGE_ID} --security-groups relay --key-name tim-chromebook --nic <net-id=${}> "tor relay ${n}"
