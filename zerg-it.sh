@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+#set -x
 
 TENANT_ID=c70abe88ef094f999adb4d3eb4d01725
 ROUTER_ID=8f67ee65-32c2-4191-9d43-5db7abcef9f1
@@ -17,7 +17,7 @@ for i in {1..20}
 do
 	neutron net-create --tenant-id $TENANT_ID "relay network ${i}"
 	echo "$(tput setaf 1)Creating network ${i}$(tput sgr0)"
-	neutron subnet-create --tenant-id $TENANT_ID --name "relay network ${i} subnet" --dns-nameserver 8.8.8.8 --enable-dhcp "relay network ${i}" 10.0.0.0/24
+	neutron subnet-create --tenant-id $TENANT_ID --name "relay network ${i} subnet" --dns-nameserver 8.8.8.8 --enable-dhcp "relay network ${i}" 10.0.${i}.0/29
 	echo "$(tput setaf 2)Creating a subent for network ${i}"
 	neutron router-interface-add ${ROUTER_ID} "relay network ${i} subnet"
 	echo "$(tput setaf 3)Attaching network ${i} to the router$(tput sgr0)"
