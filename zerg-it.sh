@@ -22,6 +22,7 @@ do
 	neutron router-interface-add ${ROUTER_ID} "relay network ${i} subnet"
 	echo "$(tput setaf 3)Attaching network ${i} to the router$(tput sgr0)"
 	NETWORK_ID=$(neutron net-show "relay network ${i}" --format shell | grep -w 'id=' | awk -F "=" '{print $2}' | tr -d \")
+	sleep 10
 
 	nova boot --flavor 10 --image ${IMAGE_ID} --security-groups Relays --key-name tim-chromebook --nic net-id=${NETWORK_ID} "tor relay ${i}"
 	echo "$(tput setaf 1)Booting relay #${i}$(tput sgr0)"
