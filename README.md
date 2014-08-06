@@ -3,6 +3,10 @@ yolo-dangerzone
 
 A torrid demo of horrible mass Tor relays. They're multiplying!
 
+Purpose
+-------
+None whatsoever. However, it does create a lot of Tor relays for some reason.
+
 Notes
 -----
 This project is endorsed by the space pope.
