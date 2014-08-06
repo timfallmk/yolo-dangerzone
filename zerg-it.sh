@@ -13,15 +13,18 @@ source ./environment.rc
 
 
 # create a new network and subnet, then connect them to the router
-for n in ${iterations}
+for i in {1..20}
 do
-	neutron net-create --tenant-id $TENANT_ID "relay network ${n}"
-	echo "$(tput setaf 1)Creating network ${n}$(tput sgr0)"
-	neutron subnet-create --tenant-id $TENANT_ID --name "relay network ${n} subnet" --dns-nameserver 8.8.8.8 --enable-dhcp "relay network ${n}" 10.0.0.0/24
-	echo "$(tput setaf 2)Creating a subent for network ${n}"
-	neutron router-interface-add ${ROUTER_ID} "relay network ${n} subnet"
-	echo "$(tput setaf 3)Attaching network ${n} to the router$(tput sgr0)"
+	neutron net-create --tenant-id $TENANT_ID "relay network ${i}"
+	echo "$(tput setaf 1)Creating network ${i}$(tput sgr0)"
+	neutron subnet-create --tenant-id $TENANT_ID --name "relay network ${i} subnet" --dns-nameserver 8.8.8.8 --enable-dhcp "relay network ${i}" 10.0.0.0/24
+	echo "$(tput setaf 2)Creating a subent for network ${i}"
+	neutron router-interface-add ${ROUTER_ID} "relay network ${i} subnet"
+	echo "$(tput setaf 3)Attaching network ${i} to the router$(tput sgr0)"
+	NETWORK_ID=$(neutron net-show "relay network ${i}" --format shell | grep -w 'id=' | awk -F "=" '{print $2}' | tr -d \")
 
-	nova boot --flavor 10 --image ${IMAGE_ID} --security-groups Relay --key-name tim-chromebook --nic net-id=${} "tor relay ${n}"
-	echo "$(tput setaf 1)Booting relay #${n}$(tput sgr0)"
+	nova boot --flavor 10 --image ${IMAGE_ID} --security-groups Relays --key-name tim-chromebook --nic net-id=${NETWORK_ID} "tor relay ${i}"
+	echo "$(tput setaf 1)Booting relay #${i}$(tput sgr0)"
+	
+	sleep 30
 done
