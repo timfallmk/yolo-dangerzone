@@ -13,7 +13,7 @@ source ./environment.rc
 
 
 # create a new network and subnet, then connect them to the router
-for i in {1..20}
+for i in {1..$iterations}
 do
 	neutron net-create --tenant-id $TENANT_ID "relay network ${i}"
 	echo "$(tput setaf 1)Creating network ${i}$(tput sgr0)"
